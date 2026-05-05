@@ -4,7 +4,11 @@
     "allowImportingTsExtensions": true,
     "lib": ["ES2022"],
     "noEmit": true,
-    "types": ["node"]
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
   "include": ["*.ts"],
   "exclude": ["node_modules"]
