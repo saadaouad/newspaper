@@ -5,10 +5,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 
+import { useAuth } from '@/providers/auth';
 import { Badge, Button, Card, CardContent } from '@/components/index';
 import type { WikiArticleViewerProps } from '@/types/wiki';
 
 const WikiArticleViewer = ({ article, canEdit = false }: WikiArticleViewerProps) => {
+  const { isAuthenticated } = useAuth();
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -45,7 +48,7 @@ const WikiArticleViewer = ({ article, canEdit = false }: WikiArticleViewerProps)
             </div>
           </div>
         </div>
-        {canEdit && (
+        {isAuthenticated && canEdit && (
           <div className="ml-4 flex items-center gap-2">
             <Link href={`/wiki/edit/${article.id}`} className="cursor-pointer">
               <Button variant="outline" className="cursor-pointer">
@@ -152,7 +155,7 @@ const WikiArticleViewer = ({ article, canEdit = false }: WikiArticleViewerProps)
         <Link href="/">
           <Button variant="outline">← Back to Articles</Button>
         </Link>
-        {canEdit && (
+        {isAuthenticated && canEdit && (
           <div className="flex items-center gap-2">
             <Link href={`/wiki/edit/${article.id}`} className="cursor-pointer">
               <Button className="cursor-pointer">

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { Toaster } from 'sonner';
 
+import { AuthProvider } from '@/providers/auth';
 import { cn } from '@/utils/cn';
 import { NavBar } from '@/components/index';
 import './globals.css';
@@ -29,8 +30,10 @@ const RootLayout = ({
     <html lang="en" className={cn('font-sans', geistSans.variable)}>
       <body className={geistMono.variable}>
         <Toaster position="top-right" richColors />
-        <NavBar />
-        <main className="container mx-auto">{children}</main>
+        <AuthProvider>
+          <NavBar />
+          <main className="container mx-auto">{children}</main>
+        </AuthProvider>
       </body>
     </html>
   );

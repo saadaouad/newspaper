@@ -18,15 +18,13 @@ export const me = async (request: AuthenticatedRequest, reply: FastifyReply) => 
 
     const token = await generateToken({
       id: user.id,
-      email: user.email,
-      username: user.username
+      email: user.email
     });
 
     return reply.status(200).send({
       user: {
         id: user.id,
         email: user.email,
-        username: user.username,
         firstName: user.firstName,
         lastName: user.lastName,
         createdAt: user.createdAt

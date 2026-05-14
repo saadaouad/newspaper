@@ -1,3 +1,5 @@
+import type { Article } from './article';
+
 export interface WikiCardProps {
   title: string;
   author: string;
@@ -6,41 +8,32 @@ export interface WikiCardProps {
   href: string;
 }
 
-export interface WikiEditorProps {
+export type WikiEditorProps = {
   initialTitle?: string;
   initialContent?: string;
   isEditing?: boolean;
   articleId?: string;
-}
+};
 
-export interface WikiEditorFormPayload {
+export type WikiEditorFormPayload = {
   title: string;
   content: string;
   files: File[];
-}
+};
 
-export interface WikiEditorFormErrors {
+export type WikiEditorFormErrors = {
   title?: string;
   content?: string;
-}
+};
 
-export interface ViewerArticle {
-  title: string;
-  author: string | null;
-  id: number;
-  content: string;
-  createdAt: string;
-  imageUrl?: string | null;
-}
-
-export interface WikiArticleViewerProps {
-  article: ViewerArticle;
+export type WikiArticleViewerProps = {
+  article: Article;
   canEdit?: boolean;
   pageviews?: number | null;
-}
+};
 
-export interface PageProps {
+export type PageProps = {
   params: Promise<{
     id: string;
   }>;
-}
+};

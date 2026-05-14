@@ -9,12 +9,18 @@ type MutationParams<TBody = unknown> = {
   endpoint: string;
   method: MutationMethod;
   body?: TBody;
+  successMessage?: string;
 };
 
 export const useMutation = <TData = unknown>() => {
   const [loading, setLoading] = useState(false);
 
-  const mutation = async <TBody = unknown>({ endpoint, method, body }: MutationParams<TBody>) => {
+  const mutation = async <TBody = unknown>({
+    endpoint,
+    method,
+    body,
+    successMessage
+  }: MutationParams<TBody>) => {
     setLoading(true);
     try {
       const res = await fetch(`${API_URL}${endpoint}`, {
@@ -27,6 +33,8 @@ export const useMutation = <TData = unknown>() => {
       if (!res.ok) {
         const message = (data as { error: string }).error;
         toast.error(message);
+      } else if (successMessage) {
+        toast.success(successMessage);
       }
 
       return data;

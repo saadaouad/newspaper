@@ -18,13 +18,15 @@ import {
   Label
 } from '@/components/index';
 import { useMutation } from '@/hooks/useMutation';
+import { useAuth } from '@/providers/auth';
 
 type SignInValues = z.input<typeof loginSchema>;
 
 type LoginResponse = { token?: string; error?: string };
 
-const SignIn = () => {
+function SignInForm() {
   const router = useRouter();
+  const { setSessionToken } = useAuth();
   const { mutation, loading } = useMutation<LoginResponse>();
   const {
     register,
@@ -45,7 +47,7 @@ const SignIn = () => {
     if (mutate.error) return;
     if (!mutate.token) return;
 
-    localStorage.setItem('token', mutate.token);
+    setSessionToken(mutate.token);
     router.push('/');
   });
 
@@ -108,6 +110,6 @@ const SignIn = () => {
       </Card>
     </div>
   );
-};
+}
 
-export default SignIn;
+export default SignInForm;
