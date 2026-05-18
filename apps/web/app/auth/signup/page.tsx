@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+
 import { useForm } from 'react-hook-form';
 import { registerSchema, type z } from '@repo/schema-validation';
 
@@ -18,13 +19,15 @@ import {
   Label
 } from '@/components/index';
 import { useMutation } from '@/hooks/useMutation';
+import { useAuth } from '@/providers/auth';
 
 type SignUpValues = z.input<typeof registerSchema>;
 
 type RegisterResponse = { token?: string; error?: string };
 
-const SignUp = () => {
+function SignUpForm() {
   const router = useRouter();
+  const { setSessionToken } = useAuth();
   const { mutation, loading } = useMutation<RegisterResponse>();
   const {
     register,
@@ -32,20 +35,21 @@ const SignUp = () => {
     formState: { errors }
   } = useForm<SignUpValues>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { email: '', password: '', username: '', firstName: '', lastName: '' }
+    defaultValues: { email: '', password: '', firstName: '', lastName: '' }
   });
 
   const onSubmit = handleSubmit(async (values) => {
     const mutate = await mutation({
       endpoint: '/auth/register',
       method: 'POST',
-      body: values
+      body: values,
+      successMessage: 'Account has been created'
     });
 
     if (mutate.error) return;
     if (!mutate.token) return;
 
-    localStorage.setItem('token', mutate.token);
+    setSessionToken(mutate.token);
     router.push('/');
   });
 
@@ -110,17 +114,6 @@ const SignUp = () => {
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <Label htmlFor="username">Username</Label>
-              <Input
-                id="username"
-                type="text"
-                autoComplete="username"
-                aria-invalid={!!errors.username}
-                className="py-5"
-                {...register('username')}
-              />
-            </div>
-            <div className="flex flex-col gap-2 mt-5">
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
@@ -151,6 +144,6 @@ const SignUp = () => {
       </Card>
     </div>
   );
-};
+}
 
-export default SignUp;
+export default SignUpForm;

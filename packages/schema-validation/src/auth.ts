@@ -12,7 +12,6 @@ const password = z.string().min(1, 'Password is required').min(6, 'Password is s
 export const registerSchema = z.object({
   email,
   password,
-  username: z.string().trim().max(50, 'Username must be at most 50 characters'),
   firstName: z
     .string()
     .trim()

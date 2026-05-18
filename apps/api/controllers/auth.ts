@@ -13,14 +13,13 @@ export const register = async (
   reply: FastifyReply
 ) => {
   try {
-    const { email, username, password, firstName, lastName } = request.body;
+    const { email, password, firstName, lastName } = request.body;
     const hashedPassword = await hashPassword(password);
 
     const [user] = await db
       .insert(users)
       .values({
         email,
-        username,
         password: hashedPassword,
         firstName,
         lastName
@@ -28,7 +27,6 @@ export const register = async (
       .returning({
         id: users.id,
         email: users.email,
-        username: users.username,
         firstName: users.firstName,
         lastName: users.lastName,
         createdAt: users.createdAt
@@ -40,8 +38,7 @@ export const register = async (
 
     const token = await generateToken({
       id: user.id,
-      email: user.email,
-      username: user.username
+      email: user.email
     });
 
     return reply.status(201).send({
@@ -87,8 +84,7 @@ export const login = async (
 
     const token = await generateToken({
       id: user.id,
-      email: user.email,
-      username: user.username
+      email: user.email
     });
 
     return reply.status(200).send({
@@ -96,7 +92,6 @@ export const login = async (
       user: {
         id: user.id,
         email: user.email,
-        username: user.username,
         firstName: user.firstName,
         lastName: user.lastName,
         createdAt: user.createdAt

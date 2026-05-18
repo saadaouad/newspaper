@@ -1,12 +1,16 @@
 'use client';
 
-import { Calendar, ChevronRight, Edit, Home, Trash, User } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import ReactMarkdown from 'react-markdown';
+import dynamic from 'next/dynamic';
+import { Calendar, ChevronRight, Edit, Home, Trash, User } from 'lucide-react';
 
-import { Badge, Button, Card, CardContent } from '@/components/index';
+import { Badge, Button, Card, CardContent, Loading } from '@/components/index';
 import type { WikiArticleViewerProps } from '@/types/wiki';
+
+const ReactMarkdown = dynamic(() => import('react-markdown'), {
+  loading: () => <Loading />
+});
 
 const WikiArticleViewer = ({ article, canEdit = false }: WikiArticleViewerProps) => {
   const formatDate = (dateString: string) => {
